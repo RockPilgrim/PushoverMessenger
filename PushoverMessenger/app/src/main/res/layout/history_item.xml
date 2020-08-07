@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="message"
+            type="my.rockpilgrim.pushovermessenger.data.Message" />
+
+        <variable
+            name="clickListener"
+            type="my.rockpilgrim.pushovermessenger.viewModel.SendMessageListener" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView"
+            android:clickable="true"
+            app:cardElevation="5dp"
+            android:layout_marginVertical="@dimen/margin_small"
+            android:layout_marginHorizontal="@dimen/margin_big"
+            android:onClick="@{()->clickListener.sendMessage(message)}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="true">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:padding="@dimen/margin_medium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:text="@string/receiver"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/userKeyTexView"
+                    android:text="@{message.user}"
+                    tools:text="@string/user_token"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:text="@string/message"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/messageTexView"
+                    android:text="@{message.message}"
+                    tools:text="@tools:sample/lorem/random"
+                    android:maxLines="2"
+                    android:ellipsize="end"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    tools:text="Send: N/A"
+                    app:data="@{message.date}"
+                    android:layout_marginTop="@dimen/margin_big"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+
+    </FrameLayout>
+</layout>

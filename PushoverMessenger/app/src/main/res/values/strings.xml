@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name" translatable="false">PushoverMessenger</string>
+    <string name="history">History</string>
+    <string name="send">Send</string>
+    <string name="user_token" translatable="false">user token</string>
+    <string name="title">Title</string>
+    <string name="message">Message</string>
+    <string name="qr_photo_description">make qr photo</string>
+    <string name="receiver">Receiver:</string>
+    
+    <string name="api_token">aqutuo4j65vgrkht7tmp9ds92d7suc</string>
+    <string name="sent">Sent</string>
+    <string name="error">Error</string>
+    <string name="no_history_no_future_live_now">No History\nNo Future</string>
+    <string name="no_data">Send: N/A</string>
+    <string name="loading">Loading</string>
+</resources>
