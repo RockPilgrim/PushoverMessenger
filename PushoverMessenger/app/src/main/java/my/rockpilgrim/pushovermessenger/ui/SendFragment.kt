@@ -1,12 +1,16 @@
 package my.rockpilgrim.pushovermessenger.ui
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -25,6 +29,7 @@ class SendFragment : Fragment() {
         val TAG = SendFragment::class.java.simpleName
     }
     private lateinit var viewModel: SendViewModel
+    private lateinit var imm: InputMethodManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,25 +44,49 @@ class SendFragment : Fragment() {
     ): View? {
         Log.i(TAG,"onCreateView()")
         val binding = SendFragmentBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
-        binding.historyButton.setOnClickListener {
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        imm = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        initUI()
+    }
+
+    private fun initUI() {
+        historyButton.setOnClickListener {
             nextFragment()
         }
-        binding.sendButton.setOnClickListener {
-            viewModel.sendMessage(
-                apiToken = getString(R.string.api_token),
-                userKey = binding.userKeyEditText.text.toString(),
-                title = binding.titleEditText.text.toString(),
-                message = binding.messageEditText.text.toString())
+        sendButton.setOnClickListener {
+            sendMessage()
         }
-        binding.scanButton.setOnClickListener {
-            Log.i(TAG,"scanButton clicked()")
+        scanButton.setOnClickListener {
+            Log.i(TAG, "scanButton clicked()")
             val scanner = IntentIntegrator.forSupportFragment(this)
             scanner.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES)
             scanner.setBeepEnabled(false)
             scanner.initiateScan()
         }
-        return binding.root
+
+        messageEditText.setOnEditorActionListener { v, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_DONE || (event.keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN)) {
+                closeKeyBoard()
+                sendMessage()
+                return@setOnEditorActionListener true
+            }
+            return@setOnEditorActionListener false
+        }
+
+    }
+
+    private fun sendMessage() {
+        clearSpace()
+        viewModel.sendMessage(
+            apiToken = getString(R.string.api_token),
+            userKey = userKeyEditText.text.toString(),
+            title = titleEditText.text.toString(),
+            message = messageEditText.text.toString()
+        )
     }
 
     override fun onStart() {
@@ -134,5 +163,9 @@ class SendFragment : Fragment() {
         super.onStop()
         Log.i(TAG,"onStop()")
         saveState()
+    }
+
+    private fun closeKeyBoard() {
+        imm.hideSoftInputFromWindow(requireView().windowToken, 0)
     }
 }

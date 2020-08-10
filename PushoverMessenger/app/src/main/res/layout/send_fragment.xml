@@ -28,6 +28,8 @@
                     android:id="@+id/userKeyEditText"
                     android:nextFocusDown="@id/titleEditText"
                     android:maxLines="1"
+                    android:singleLine="true"
+                    android:imeOptions="actionNext"
                     android:maxEms="30"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
@@ -44,6 +46,8 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/titleEditText"
                     android:maxLines="1"
+                    android:singleLine="true"
+                    android:imeOptions="actionNext"
                     android:nextFocusDown="@id/messageEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
@@ -66,8 +70,10 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/messageEditText"
-                        android:nextFocusDown="@id/sendButton"
                         android:maxLines="1"
+                        android:singleLine="true"
+                        android:inputType="textCapSentences|textAutoCorrect"
+                        android:imeOptions="actionDone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                 </com.google.android.material.textfield.TextInputLayout>

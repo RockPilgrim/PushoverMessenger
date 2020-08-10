@@ -11,6 +11,7 @@ import my.rockpilgrim.pushovermessenger.data.Message
 import my.rockpilgrim.pushovermessenger.request.Api
 import my.rockpilgrim.pushovermessenger.viewModel.SendViewModel.State.Base
 import my.rockpilgrim.pushovermessenger.viewModel.SendViewModel.State.Sent
+import retrofit2.HttpException
 
 class SendViewModel : ViewModel() {
 
@@ -36,9 +37,15 @@ class SendViewModel : ViewModel() {
         val messageSend = Message(token = apiToken, user = userKey, title = title, message = message)
         viewModelScope.launch(Dispatchers.IO) {
             Log.d(TAG, "sendMessage() ${Thread.currentThread().name}")
-            Api.create().sendMessage(messageSend)
-            stateLiveData.postValue(Sent)
-            messageDao.add(messageSend)
+            try {
+
+                Api.create().sendMessage(messageSend)
+                stateLiveData.postValue(Sent)
+                messageDao.add(messageSend)
+            } catch (he: HttpException) {
+                Log.e(TAG, "Wrong userKey:", he)
+                stateLiveData.postValue(State.Error)
+            }
         }
     }
 
